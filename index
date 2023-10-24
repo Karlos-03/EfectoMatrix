@@ -1,0 +1,68 @@
+<html>
+<head>
+<style>
+  body {
+    margin: 0;
+    background: black;
+  }
+  canvas {
+    display: block;
+  }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  // Obtenemos el elemento canvas y su contexto
+  //We get the canvas element and its context
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  // Ajustamos el tamaño del canvas al de la ventana
+  //Adjust the size of the canvas to the size of the window
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Define the size of the characters and the number of columns
+  const fontSize = 20;
+  const columns = Math.floor(canvas.width / fontSize);
+
+  // Create an array with the position and of each column
+  const yPosition = Array(columns).fill(0);
+
+  // We define a function that will be executed from time to time
+  function draw() {
+    // We painted the background with a semi-transparent black color
+    ctx.fillStyle = "rgba(0,0,0,0.1)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Paint the characters with a green color
+    ctx.fillStyle = "#0f0";
+    ctx.font = fontSize + "px monospace";
+
+    // We go through each column of the array
+    yPosition.forEach((y, index) => {
+      // We generate a random number between 0 and 9
+      const number = Math.floor(Math.random() * 10);
+
+      // Calculate the x-position of the column
+      const x = index * fontSize;
+
+      // Paint the number on the canvas
+      ctx.fillText(number, x, y);
+
+      // If the position and exceeds the height of the canvas or there is a 5% chance, we reset the position and the column
+      if (y > canvas.height || Math.random() > 0.95) {
+        yPosition[index] = 0;
+      } else {
+        // If not, we increase the position and column in the font size
+        yPosition[index] += fontSize;
+      }
+    });
+  }
+
+  // We call the draw function every 50 milliseconds
+  setInterval(draw,50);
+</script>
+</body>
+</html>
